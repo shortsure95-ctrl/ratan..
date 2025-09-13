@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>College Routine 2025</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root{--blue:#4a90e2;--bg:#f4f7fa;--card:#ffffff;--muted:#6b7280}
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: var(--bg);
+      color:#0f1724;
+    }
+    header {
+      width: 100%;
+      background: linear-gradient(90deg, rgba(74,144,226,0.95), rgba(20,60,120,0.95));
+      color: #fff;
+      padding: 18px 24px;
+      box-shadow: 0 6px 20px rgba(10,20,40,0.15);
+      display:flex;
+      gap:18px;
+      align-items:center;
+      justify-content:center;
+      flex-wrap:wrap;
+      flex-direction: column;
+    }
+    .header-left{display:flex;flex-direction:column;gap:6px;align-items:center}
+    .header-left h1{margin:0;font-size:32px;letter-spacing:1px;text-transform:uppercase}
+    .header-left p{margin:0;font-size:14px;color:rgba(255,255,255,0.85)}
+    .header-center{display:flex;align-items:center;justify-content:center;margin-top:12px;width:100%}
+    .preview-video{width:100%;max-width:1400px;height:auto;border-radius:12px;overflow:hidden;border:4px solid rgba(255,255,255,0.08);background:#000}
+    .preview-video video{width:100%;height:auto;max-height:500px;object-fit:contain;display:block;margin:0 auto}
+    .container {
+      display: flex;
+      width: 100%;
+      max-width: 1200px;
+      margin-top: 20px;
+    }
+    .days {flex: 1;display: flex;flex-direction: column;gap: 10px;padding: 20px;}
+    .day-btn {padding: 15px;background: var(--card);border: 2px solid var(--blue);cursor: pointer;text-align: center;border-radius: 8px;transition: all 0.3s ease;}
+    .day-btn:hover { background: var(--blue); color:#fff }
+    .day-btn.active { background: var(--blue); color:#fff; transform: scale(1.05); z-index:2 }
+    .routine, .class-details { flex: 2; padding: 20px }
+    .routine { background: var(--card); border-radius: 8px; margin-right: 10px; box-shadow: 0 4px 6px rgba(0,0,0,0.06) }
+    .class-details { background: var(--card); border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.06) }
+    .class-item { padding: 10px; border-bottom: 1px solid #eee; cursor: pointer }
+    .class-item:hover { background: #f9fbff }
+    .hidden { display: none }
+    /* Contact buttons inside class details */
+    .contact-buttons{margin-top:12px;display:flex;gap:12px}
+    .contact-buttons a{padding:10px 16px;color:#fff;border-radius:6px;text-decoration:none;font-size:14px;display:inline-flex;align-items:center;gap:8px}
+    .whatsapp{background:#25D366}
+    .email{background:#0072c6}
+    /* Footer */
+    footer{margin-top:30px;padding:20px;text-align:center;background:#fff;width:100%;box-shadow:0 -2px 6px rgba(0,0,0,0.05)}
+    footer h3{margin:0 0 12px 0;font-size:18px;text-transform:uppercase;color:#333}
+    .dev-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+    .dev-buttons a{padding:10px 16px;color:#fff;border-radius:6px;text-decoration:none;font-size:14px;display:inline-flex;align-items:center;gap:6px}
+    .fb{background:#1877f2}
+    .wp{background:#25D366}
+    .tg{background:#0088cc}
+    .dc{background:#5865f2}
+    @media (max-width:900px){
+      .header-left h1{font-size:24px}
+      .preview-video video{max-height:230px}
+      .container{flex-direction:column;align-items:center}
+      .routine, .class-details{margin:10px 0;width:95%}
+      .days{flex-direction:row;flex-wrap:wrap;justify-content:center}
+      .day-btn{flex:1 1 40%;min-width:120px}
+    }
+    @media (max-width:500px){
+      .header-left h1{font-size:20px}
+      .day-btn{padding:10px;font-size:14px}
+      .contact-buttons{flex-direction:column}
+      .contact-buttons a{justify-content:center}
+      footer h3{font-size:14px}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-left">
+      <h1 id="mainTitle">WELCOME TO</h1>
+    </div>
+    <div class="header-center">
+      <div class="preview-video" title="Header video preview">
+        <video id="headerVideo" src="kkb.mp4" muted loop autoplay playsinline></video>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="days">
+      <div class="day-btn" onclick="showRoutine('sunday')">Sunday</div>
+      <div class="day-btn" onclick="showRoutine('monday')">Monday</div>
+      <div class="day-btn" onclick="showRoutine('tuesday')">Tuesday</div>
+      <div class="day-btn" onclick="showRoutine('wednesday')">Wednesday</div>
+      <div class="day-btn" onclick="showRoutine('thursday')">Thursday</div>
+      <div class="day-btn" onclick="showRoutine('friday')">Friday</div>
+    </div>
+
+    <div class="routine" id="routine">
+      <h2>Select a day to view routine</h2>
+    </div>
+
+    <div class="class-details hidden" id="class-details">
+      <h2 id="subject-name">Class Details</h2>
+      <p><b>Teacher:</b> <span id="teacher-name"></span></p>
+      <p><b>Time:</b> <span id="class-time"></span></p>
+      <img id="teacher-pic" src="" alt="Teacher" width="120" style="border-radius:10px;">
+      <div class="contact-buttons">
+        <a id="wp-btn" href="#" target="_blank" class="whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+        <a id="email-btn" href="#" target="_blank" class="email"><i class="fas fa-envelope"></i> Email</a>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <h3>DEVELOPER: RATAN MAJUMDER</h3>
+    <div class="dev-buttons">
+      <a href="https://www.facebook.com/profile.php?id=61552305287329" class="fb" target="_blank"><i class="fab fa-facebook-f"></i> Facebook</a>
+      <a href="https://wa.me/8801609166109" class="wp" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+      <a href="https://t.me/phycokiller420" class="tg" target="_blank"><i class="fab fa-telegram"></i> Telegram</a>
+      <a href="https://discord.gg/JXkquC978A" class="dc" target="_blank"><i class="fab fa-discord"></i> Discord</a>
+    </div>
+  </footer>
+
+  <script>
+    const routines = {
+      sunday: [
+        { subject: 'BANGLA', teacher: 'POLI MEDAM', time: '10:00-10:50 AM', pic: 'BANGLA.jpg', whatsapp:'https://wa.me/8801609166109', email:'mailto:poli@example.com' },
+        { subject: 'BIOLOGY', teacher: 'BLG SIR', time: '10:50-11:40 AM', pic: 'BIOLOGY.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:bio@example.com' },
+        { subject: 'ENGLISH', teacher: 'PRODIP SIR', time: '11:40-12:30 PM', pic: 'ENGLISH.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:eng@example.com' },
+        { subject: 'MATH', teacher: 'NRIPEN SIR', time: '12:30-01:20 PM', pic: 'MATH.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:math@example.com' },
+        { subject: 'ICT', teacher: 'PANKOJ SIR', time: '01:20-02:10 PM', pic: 'ICT.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:ict@example.com' },
+      ],
+      monday: [
+        { subject: 'ENGLISH', teacher: 'PRODIP SIR', time: '10:00-10:50 AM', pic: 'ENGLISH.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:aye@example.com' },
+        { subject: 'BANGLA', teacher: 'POLI MEDAM', time: '10:50-11:40 AM', pic: 'BANGLA.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:aye@example.com' },
+        { subject: 'BIOLOGY', teacher: 'GLG SIR', time: '11:40-12:30 PM', pic: 'BIOLOGY.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:aye@example.com' },
+        { subject: 'PHYSIC', teacher: 'BIKU SIR', time: '01:20-02:10 PM', pic: 'PHYSIC.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:aye@example.com' },
+      ],
+      tuesday: [
+        { subject: 'PHYSIC', teacher: 'BIKU SIR', time: '10:00-10:50 AM', pic: 'PHYSIC.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:aye@example.com'},
+        { subject: 'MATH', teacher: 'NRIPEN SIR', time: '10:50-11:40 AM', pic: 'MATH.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:aye@example.com'},
+        { subject: 'BANGLA', teacher: 'POLI MEDAM', time: '10:50-11:40 AM', pic: 'BANGLA.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:aye@example.com'},
+        { subject: 'ENGLISH', teacher: 'PRODIP  SIR', time: '01:20-02:10 PM', pic: 'ENGLISH.jpg',whatsapp:'https://wa.me/8801609166109', email:'mailto:aye@example.com'},
+      ],
+      wednesday: [
+        { subject: 'ICT', teacher: 'PANKOJ SIR', time: '10:00-10:50 AM', pic: 'ICT.jpg', whatsapp:'https://wa.me/8801609166109', email:'mailto:poli@example.com' },
+        { subject: 'BANGLA', teacher: 'BANGLA SIR', time: '10:50-11:40 AM', pic: 'BANGLA.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:bio@example.com' },
+        { subject: 'CHEMSTRY', teacher: 'ROJOT SIR', time: '11:40-12:30 PM', pic: 'CHEMSTRY.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:eng@example.com' },
+        { subject: 'ICT', teacher: 'PANKOJ SIR', time: '01:20-02:10 PM', pic: 'ICT.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:ict@example.com' },
+      ],
+      thursday: [
+        { subject: 'ENGLISH', teacher: 'PRODIP SIR', time: '10:00-10:50 AM', pic: 'ICT.jpg', whatsapp:'https://wa.me/8801609166109', email:'mailto:poli@example.com' },
+        { subject: 'ICT', teacher: 'PANKOJ SIR', time: '10:50-11:40 AM', pic: 'BANGLA.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:bio@example.com' },
+        { subject: 'CHEMSTRY', teacher: 'ROJOT SIR', time: '11:40-12:30 PM', pic: 'CHEMSTRY.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:eng@example.com' },
+        { subject: 'BIOLOGY', teacher: 'BLG SIR', time: '01:20-02:10 PM', pic: 'ICT.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:ict@example.com' },
+      ],
+      friday: [
+        { subject: 'CHEMSTRY', teacher: 'ROJOT SIR', time: '11:40-12:30 PM', pic: 'CHEMSTRY.jpg', whatsapp:'https://wa.me/8801XXXXXXXXX', email:'mailto:eng@example.com' },
+      ],
+    };
+
+    function showRoutine(day) {
+      document.querySelectorAll('.day-btn').forEach(btn => btn.classList.remove('active'));
+      event.currentTarget.classList.add('active');
+
+      const routineDiv = document.getElementById('routine');
+      routineDiv.innerHTML = `<h2>${day.charAt(0).toUpperCase() + day.slice(1)} Routine</h2>`;
+
+      if (!routines[day] || routines[day].length === 0) {
+        routineDiv.innerHTML += '<p>No classes today.</p>';
+        return;
+      }
+
+      routines[day].forEach(cls => {
+        const div = document.createElement('div');
+        div.className = 'class-item';
+        div.innerText = `${cls.subject}`;
+        div.onclick = () => showDetails(cls);
+        routineDiv.appendChild(div);
+      });
+    }
+
+    function showDetails(cls) {
+      document.getElementById('class-details').classList.remove('hidden');
+      document.getElementById('subject-name').innerText = cls.subject;
+      document.getElementById('teacher-name').innerText = cls.teacher;
+      document.getElementById('class-time').innerText = cls.time;
+      document.getElementById('teacher-pic').src = cls.pic;
+      document.getElementById('wp-btn').href = cls.whatsapp || "#";
+      document.getElementById('email-btn').href = cls.email || "#";
+    }
+
+    /* -------------------- Notification System -------------------- */
+    if ("Notification" in window && Notification.permission !== "granted") {
+      Notification.requestPermission();
+    }
+
+    const notifyTimes = ["09:55 AM","10:45 AM","11:35 AM","12:25 PM","01:15 PM"];
+
+    function parseTime(timeStr) {
+      const [time, modifier] = timeStr.split(" ");
+      let [hours, minutes] = time.split(":").map(Number);
+      if (modifier === "PM" && hours !== 12) hours += 12;
+      if (modifier === "AM" && hours === 12) hours = 0;
+      const date = new Date();
+      date.setHours(hours, minutes, 0, 0);
+      return date;
+    }
+
+    setInterval(() => {
+      const now = new Date();
+      notifyTimes.forEach(t => {
+        const classTime = parseTime(t);
+        const diff = classTime - now;
+        if (diff > 0 && diff <= 5 * 60 * 1000) {
+          showClassNotification(t);
+        }
+      });
+    }, 30000);
+
+    function showClassNotification(time) {
+      if (window.lastNotified === time) return;
+      window.lastNotified = time;
+
+      let iconUrl = "bell.png";
+      fetch(iconUrl).catch(() => iconUrl = "");
+
+      if ("Notification" in window && Notification.permission === "granted") {
+        new Notification("📚 Class Reminder", {
+          body: `Your next class starts at ${time} (in 5 minutes)\n— Ratan Majumder`,
+          icon: iconUrl || undefined
+        });
+      }
+
+      try {
+        const audio = new Audio("notify.mp3");
+        audio.play().catch(() => console.log("Sound fallback: browser default"));
+      } catch (e) {
+        console.log("No custom sound, fallback only.");
+      }
+
+      if (navigator.vibrate) {
+        navigator.vibrate([200, 100, 200]); // ✅ fixed
+      }
+    }
+  </script>
+</body>
+</html>
